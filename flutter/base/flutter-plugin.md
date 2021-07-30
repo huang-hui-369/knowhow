@@ -1,0 +1,15 @@
+* [构造Android的Intent对象](https://github.com/flutter/plugins/blob/master/packages/android_intent)
+* [访问Android系统的AlertManager](https://github.com/flutter/plugins/blob/master/packages/android_alarm_manager)
+* [获取和监听系统电量变化。](https://github.com/flutter/plugins/blob/master/packages/battery)
+* [获取和监听系统网络连接状态](https://github.com/flutter/plugins/blob/master/packages/connectivity)
+* [获取设备型号等信息 ](https://github.com/flutter/plugins/blob/master/packages/device_info)
+* [从设备中选取或者拍摄照片](https://github.com/flutter/plugins/blob/master/packages/image_picker)
+* [获取App安装包的版本等信息](https://github.com/flutter/plugins/blob/master/packages/package_info)
+* [获取常用文件路径](https://github.com/flutter/plugins/blob/master/packages/path_provider)
+* [App图标添加快捷方式，iOS的eponymous concept和Android的App Shortcuts](https://github.com/flutter/plugins/blob/master/packages/quick_actions)
+* [访问设备的加速度和陀螺仪传感器](https://github.com/flutter/plugins/blob/master/packages/sensors)
+* [App KV存储功能 shared_preferences](https://github.com/flutter/plugins/blob/master/packages/shared_preferences)
+* [启动URL，包括打电话、发短信和浏览网页等功能](https://github.com/flutter/plugins/blob/master/packages/url_launcher) 
+* [播放视频文件或者网络流的控件](https://github.com/flutter/plugins/blob/master/packages/video_player) 
+
+* path_provider
