@@ -446,12 +446,14 @@ if #available(iOS 10.0, *) {
             print("onMessage: $message");
             _buildDialog(context, "onMessage");
           },
-          // 点击消息通知面板启动程序时处理
+          /// 点击消息通知面板启动程序时处理
+          /// 如果设置了“ click_action：FLUTTER_NOTIFICATION_CLICK” onLaunch就会触发,否则就不会触发onLaunch
           onLaunch: (Map<String, dynamic> message) async {
             print("onLaunch: $message");
             _buildDialog(context, "onLaunch");
           },
           // 点击消息通知面板，从后台恢复程序时处理
+          /// 如果设置了“ click_action：FLUTTER_NOTIFICATION_CLICK” onResume就会触发，否则就不会触发onResume
           onResume: (Map<String, dynamic> message) async {
             print("onResume: $message");
             _buildDialog(context, "onResume");
