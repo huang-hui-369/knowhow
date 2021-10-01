@@ -1,5 +1,7 @@
 # sign
 
+email必须是公司的email，个人email不行。
+
 ## 以下のリンクをクリック
 https://powerapps.microsoft.com/ja-jp/developerplan/
 

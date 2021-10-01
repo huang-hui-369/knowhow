@@ -7,3 +7,9 @@ https://docs.microsoft.com/zh-cn/powerapps/maker/canvas-apps/using-logic-flows
 为按钮选择 OnSelect 属性
 
 FlowInApp.Run(TextInput1.Text)
+
+# フローの種類
+
+- ワークフロー
+- business フロー
+- UIフロー AI
