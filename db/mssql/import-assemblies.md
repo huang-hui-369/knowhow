@@ -15,8 +15,10 @@ SSMA4OracleSQLServerCollectionsとSSMA4OracleSQLServerExtensionsにはいろい�
 ```
    
 * 原因
+  
 ```
 このDLLはサインしてないので、信頼できない。 
+
 ```
 
 * 解決策

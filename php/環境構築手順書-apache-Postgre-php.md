@@ -170,7 +170,36 @@ isql pg postgres grandunit
 SQL>
 ```
 
+## 基本用法
+
+### 1. show version
+```
+# psql --version
+psql (PostgreSQL) 9.5.25
+```
+
+### 2. 连接Db
+```
+psql -h 127.0.0.1 -p 5021 -U db2inst1 -d sample
+```
+
+### 3. 执行sql文件
+```
+postgres=# \i /home/env/src/testdata/masterdata.sql
+```
+
+### 4. log file
+
+/var/lib/pgsql/9.5/data/pg_log
+
+### 5. サービスの起動
+
+```sh
+systemctl start postgresql-9.5.service
+```
+
 # apache install
+
 
 ```sh
 # add httpd repos
@@ -183,9 +212,18 @@ yum -y install httpd24u.x86_64
 httpd -v
 ```
 
+## 設定ファイル
 vim /etc/httpd/conf/httpd.conf
 
+/etc/httpd/conf/httpd.conf
+
+## DocumentRoot
 DocumentRoot "/var/www/html"
+
+## start service
+```
+systemctl restart httpd
+```
 
 
 # php install
@@ -285,6 +323,7 @@ Apache跟PHP是怎么关联起来的呢？
 实际上我们安装php的时候，系统已经自动添加了php的模块文件到Apache的安装目录下，即/etc/httpd/conf.d，在这个目录下我们可以看到有一个php.conf的文件，这个就是Apache关联php模块的配置。
 在Apache的配置文件最底下一行我们也可以看到IncludeOptional conf.d/*.conf，这句配置就是加载/conf.d下面的所有.conf文件
 
+## 設定ファイル
 /etc/php.ini
 
  # redhat  subscription-manager
@@ -365,3 +404,7 @@ HP:  syntax error, unexpected '&' in /etc/php.ini on line 109
 Configuration File (php.ini) Path => /etc
 ```
 
+# 参考資料
+https://tech.hitsug.net/2019/05/centos-7--php72-install.html
+
+https://qiita.com/qiitamatumoto/items/efffc0ef6e6249533201
