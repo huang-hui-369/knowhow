@@ -71,7 +71,7 @@ sys，system默认都是管理用户，可以连接访问cdb和pdb
 须通过执行一下命令
 
 ```
-sqlplus system/passowrd
+sqlplus sys as sysdba /passowrd
 alter pluggable database orclpdb open;
 ```
 
