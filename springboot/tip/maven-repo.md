@@ -1,0 +1,1 @@
+https://repo.spring.io/ui/native/plugins-release/org/springframework/boot/spring-boot-dependencies/2.1.12.RELEASE
