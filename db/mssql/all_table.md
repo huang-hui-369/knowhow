@@ -1,0 +1,8 @@
+
+
+```sql
+SELECT table_name
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE='BASE TABLE'
+and table_schema = 'SAI16' 
+```

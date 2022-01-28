@@ -10,3 +10,11 @@ SELECT  SQL_VARIANT_PROPERTY(@now, 'BaseType')
 -- datetime
 ```
 
+
+
+# EXEC sp_msforeachtable
+
+? 相當於 table name 帶 shema name
+
+EXEC sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT ALL";
+EXEC sp_MSForEachTable 'ALTER TABLE ? DISABLE TRIGGER ALL'
