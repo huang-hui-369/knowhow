@@ -211,3 +211,12 @@ public class MssqlJdbcDemo {
 }
 
 ```
+
+
+
+# jdbc自动commit
+
+```
+jdbc:sqlserver://localhost:1433;SELECTMETHOD=cursor;asteria_autocommit=TRUE
+```
+
