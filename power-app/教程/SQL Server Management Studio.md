@@ -1,0 +1,1 @@
+https://docs.microsoft.com/zh-cn/powerapps/developer/data-platform/dataverse-sql-query

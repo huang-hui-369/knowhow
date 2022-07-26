@@ -33,3 +33,13 @@ Power Automate フローは、トリガーとアクションを使用して作�
 
 # さまざまなタイプのフロー
 
+# 要点
+
+1. Power Automate はビジネス プロセスを自動化するための Web ベースのサービスです。
+2. Power Automate には、ニーズを満たすさまざまな製品が用意されています。 イベント駆動型フロー、ビジネス プロセス フロー、およびデスクトップ フローには、それぞれ固有のプロパティがあります。
+3. Power Automate では、組み込みコネクタを使用して数百のデータ ソースに接続することも、あるいは独自のカスタム コネクタを作成することもできます。
+4. ビジネス プロセスを把握している場合、従来の Power Automate コードを記述することなく、それを自動化できます。
+   
+# リソース
+- Power Automate で独自のフローを構築する https://flow.microsoft.com/
+- Power Automate のドキュメント https://docs.microsoft.com/ja-jp/flow/
