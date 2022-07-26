@@ -54,9 +54,16 @@ GO
 
 ### 差分バックアップ
 
+只能在完全backup的基础上做差分backup。
+
+要注意要将差分backup加入到backup set中，backup set中至少要有一个完全备份。
+
 ![](img/2021-07-06-17-19-52.png)
 
+![image-20220309152026474](D:\github\knowhow\db\mssql\backup-restore.assets\image-20220309152026474.png)
+
 スクリプト
+
 ```
 BACKUP DATABASE [saitama] TO  DISK = N'D:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\Backup\saitama.bak' WITH  DIFFERENTIAL , NOFORMAT, NOINIT,  NAME = N'saitama-差分 データベース バックアップ', SKIP, NOREWIND, NOUNLOAD,  STATS = 10
 GO
@@ -64,7 +71,15 @@ GO
 
 ### トランザクション ログバックアップ
 
+只能在完全backup的基础上做Log backup。
+
+要注意要将Log backup加入到backup set中，backup set中至少要有一个完全备份。
+
+backup set = full-backup + 差分-backup + log-backup
+
 ![](img/2021-07-06-17-25-33.png)
+
+![image-20220309152026474](D:\github\knowhow\db\mssql\backup-restore.assets\image-20220309152026474.png)
 
 ```
 BACKUP LOG [saitama] TO  DISK = N'D:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\Backup\saitama.bak' WITH NOFORMAT, NOINIT,  NAME = N'saitama-完全 データベース バックアップ', SKIP, NOREWIND, NOUNLOAD,  STATS = 10

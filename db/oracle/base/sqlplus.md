@@ -4,9 +4,13 @@ sqlplus [username]/[passowrd]@[IP Addr]:[Port Number]/[Service Name]
 
 sqlplus [username]/[user_password]@ORCL
 
-```
+```sql
 sqlplus saitama/Grandunit123@192.168.1.10:1521/orclpdb
 sqlplus saitama/Grandunit123@orcl
+
+sqlplus sys as sysdba
+-- 输入密码
+
 ```
 
 ### sqlplus log

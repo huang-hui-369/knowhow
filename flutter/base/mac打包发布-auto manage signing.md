@@ -240,3 +240,6 @@ Xcode project是由flutter自动生成的。
 先执行 flutter build ios
 会生成引用的第三方库所需的pod文件。
 
+
+## app store connect 
+

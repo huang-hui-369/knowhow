@@ -315,7 +315,7 @@ getsebool httpd_can_sendmail
 httpd_can_sendmail --> off
 # httpdメール送信可
 setsebool -P httpd_can_sendmail on
-``` 
+```
 
 
 Apache跟PHP是怎么关联起来的呢？
@@ -325,6 +325,125 @@ Apache跟PHP是怎么关联起来的呢？
 
 ## 設定ファイル
 /etc/php.ini
+
+
+
+# php ["failed to open stream: Permission denied" error]
+
+**現象**
+file_get_contents('/xxx/yyy.pdf'); failed to open stream: Permission denied
+
+**错误调查**
+
+1.  确认 apache error log
+
+   ```sh
+   # /var/log/apache2或/var/log/httpd
+   tail -f /var/log/httpd/error_log
+   # 发现 file_get_contents('/xxx/yyy.pdf'); failed to open stream: Permission denied
+   ```
+
+   
+
+2. 确认 php 运行用户
+
+   ```php
+   <?php echo exec('whoami'); ?>
+   ```
+
+   
+
+3. 确认 apache httpd 运行用户
+
+   ```sh
+   ps aux | grep httpd
+   # 确认第一行
+   root      1217  0.0  1.6 424736 17040 ?        Ss    2月08   1:15 /usr/sbin/httpd -DFOREGROUND
+   root      4150  0.0  0.1 117040  1016 pts/1    S+   12:45   0:00 grep --color=auto httpd
+   apache   16400  0.0  1.7 483124 18068 ?        Sl    2月15   1:00 /usr/sbin/httpd -DFOREGROUND
+   apache   16412  0.0  1.7 483188 17976 ?        Sl    2月15   1:00 /usr/sbin/httpd -DFOREGROUND
+   ```
+
+   
+
+4. 确认 /xxx/yyy.pdf的所有者，访问权限
+
+   如果httpd的运行用户为apache，/xxx/yyy.pdf的所有者为demo1：demo1将apache用户加入到demo1组，更改/xxx/下的所有子文件夹及文件的权限为644（只读）或664（读写），更狠点777（用来排除错误）
+
+   ```sh
+   将apache用户加入到demo1 group
+   usermod -a -G demo1 apache
+   # 确认apache 用户的组
+   id apache
+   chmod 777 /xxx/ -R
+   ```
+
+   
+
+5. 确认SELinux的设置
+
+   ```sh
+   sestatus
+   
+   SELinux status:                 enabled
+   SELinuxfs mount:                /sys/fs/selinux
+   SELinux root directory:         /etc/selinux
+   Loaded policy name:             targeted
+   Current mode:                   enforcing
+   Mode from config file:          enforcing
+   Policy MLS status:              enabled
+   Policy deny_unknown status:     allowed
+   Max kernel policy version:      31
+   ```
+
+   
+
+**解決方法1**
+SELinuxの無効化
+
+**解決方法2**
+
+设置SELinux Policies for Apache
+
+### Apache Context Types
+
+```sh
+man httpd_selinux
+```
+
+| httpd_sys_content_t    | Read-only directories and files used by Apache               |
+| :--------------------- | ------------------------------------------------------------ |
+| httpd_sys_rw_content_t | Readable and writable directories and files used by Apache. Assign this to directories where files can be created or modified by your application, or assign it to files directory to allow your application to modify them. |
+| httpd_log_t            | Used by Apache to generate and append to web application log files. |
+| httpd_cache_t          | Assign to a directory used by Apache for caching, if you are using mod_cache. |
+
+```sh
+# 确认现有设置
+semanage fcontext -l | grep httpd
+# Create a policy to assign the httpd_sys_content_t context to the /xxx directory, and all child directories and files.
+semanage fcontext -a -t httpd_sys_content_t "/xxx(/.*)?"
+# Create a policy to assign the httpd_log_t context to the logging directories(暂时不需要)
+semanage fcontext -a -t httpd_log_t "/xxx/logs(/.*)?"
+# Create a policy to assign the httpd_cache_t context to our cache directories(暂时不需要)
+semanage fcontext -a -t httpd_cache_t "/xxx/cache(/.*)?"
+# 如果需要读写的话Create a policy to assign the httpd_sys_rw_content_t context to the upload directory, and all child files.
+semanage fcontext -a httpd_sys_rw_content_t "/xxx/app1/public_html/uploads(/.*)?"
+# Apply the SELinux policies
+restorecon -Rv /xxx
+# 确认设置
+ls -lZ /xxx
+drwxr-xr-x. root root unconfined_u:object_r:httpd_sys_content_t:s0 apps
+drwxr-xr-x. root root unconfined_u:object_r:httpd_log_t:s0 logs
+drwxr-xr-x. root root unconfined_u:object_r:httpd_cache_t:s0 cache
+```
+
+
+
+参考文档 
+
+https://www.serverlab.ca/tutorials/linux/web-servers-linux/configuring-selinux-policies-for-apache-web-servers/
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-managing_confined_services-the_apache_http_server-configuration_examples
 
  # redhat  subscription-manager
 

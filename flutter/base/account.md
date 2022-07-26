@@ -17,6 +17,9 @@ Apple Store アカウント
 houchi@grandunit.net
 Grandunit123
 
+huanghui@grandunit.net
+Grandunit123
+
 
 # https://gitee.com/
 
