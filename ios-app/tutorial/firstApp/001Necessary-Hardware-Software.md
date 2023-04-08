@@ -1,0 +1,3 @@
+To build the applications in this book, you must have Xcode 11.4, which requires a Mac running macOS Mojave version 10.14.4 or later. Xcode, Apple’s Integrated Development Environment, is available on the App Store. Xcode includes the iOS SDK, the iOS simulator, and other development tools.
+
+If you plan on shipping an app to the App Store, you will need to join the Apple Developer Program, which costs $99/year. In addition to being able to ship apps, you will also get access to beta OS releases and advanced app capabilities, among other benefits. If you are interested, go to [developer.apple.com/programs/enroll/](https://developer.apple.com/programs/enroll/) to enroll.

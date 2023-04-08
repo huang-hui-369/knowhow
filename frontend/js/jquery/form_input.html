@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+    <input type="radio" name="gender" value="1">male
+    <br>
+    <input type="radio" name="gender" value="2">female
+    <br>
+    <button id = "setGender" > set gender</button>
+    <button id = "getGender" > get gender</button>
+
+    <br>
+    <input type="checkbox" name="intrest" id="bike" value="bike"> I have a bike
+    <br>
+    <input type="checkbox" name="intrest" id="car" value="car"> I have a car
+    <br>
+    <input type="checkbox" name="intrest" id="book" value="book"> I have a book
+    <br>
+    <button id = "setIntrest" > set Intrest</button>
+    <button id = "getIntrest" > get Intrest</button>
+
+    <script type="text/javascript">
+        $(document).ready(()=>{
+            $("#setGender").click(()=>{
+                $("[name='gender']").val(["1"]);
+            });
+
+            $("#getGender").click(()=>{
+                alert($("[name='gender']:checked").val());
+            });
+
+            $("#setIntrest").click(()=>{
+                // $("#bike").val(["bike"]); //即使只有一个checkbox也得使用数组，jquery 通过给val()设置一个数组来设置 checked属性
+                $("[name='intrest']").val(["bike","car"]);
+            });
+
+            $("#getIntrest").click(()=>{
+                let checkedItems = $("[name='intrest']:checked");
+                // 这个方法不行，它的可枚举的属性值太多了
+                // 也不支持forEach()方法
+                // for(let item in checkedItems){
+                //     alert($(item).val());
+                // };
+
+                // 只能用这个方法
+                for(let i=0;i<checkedItems.length;i++){
+                    alert($(checkedItems[i]).val());
+                };
+                
+            });
+
+
+        });
+    </script>
+</body>
+</html>

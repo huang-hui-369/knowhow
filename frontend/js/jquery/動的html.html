@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <!-- jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- moment-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
+    
+    <title>動的Html</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <ul>
+                    <li>
+                        追加动的Html时候,先定义一个div容器用来存放需要动态追加的html.
+                    </li>
+                    <li>
+                        然后js定义一个模板变量，然后每次点击追加按钮时，将模板变量追加到最后一个元素的html后
+                    </li>
+                    <li>
+                        初期化时，根据数据的长度追加响应的模板变量
+                    </li>
+                    <li>
+                        需要注意的是，jquery操作的对象为现在画面dom元素，
+                        如果模板变量里有onChange处理，一定要在将模板变量追加到html后，
+                        然后在重新在dom中找到响应的元素，来追加onChange处理
+                    </li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 追加Itemのコンテナ -->
+    <div class="container mt-5" id="item_container">
+
+    </div>
+
+    <div class="container mt-5" >
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-primary" id="btn_add_item">
+                    add item 
+                </button>
+            </div>
+            
+        </div>
+    </div>
+
+    <Script type="text/javascript">
+
+        // String.format;
+        if (!String.prototype.format) {
+            String.prototype.format = function() {
+                var args = arguments;
+                return this.replace(/{(\d+)}/g, function(match, number) { 
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match
+                ;
+                });
+            };
+        }
+
+        let Tool = {
+
+            /* 
+                前提条件： obj的name和input item的name相同
+                
+                概要： 根据指定的obj name找到input item，将obj的值设定到dom input item中
+                参数：
+                    obj : 需要设置的数据
+                    hid : jquery form 容器 
+            */
+            setObj2form : function (obj, hid) {
+                for(let key in obj) {
+                    let ev = obj[key];
+                    if(ev !=null ) {
+                        // radio
+                        let hitem = $(hid).find(("input:radio[name={0}]".format(key)));
+                        if(hitem.length !=0 ) { // foud out radio
+                            if(ev!=-1) {
+                                hitem.val([ev]); 
+                            }
+                        } else if( (hitem =  $(hid).find(("input:checkbox[name={0}]".format(key)) ) ).length  !=0 ) {
+                            // CheckBox
+                            if(Array.isArray(ev)) {
+                                hitem.val(ev);
+                            } else {
+                                hitem.val([ev]);
+                            }
+
+                        } else if( (hitem =  $(hid).find(("input:text[name={0}]".format(key)) ) ).length  !=0 ) {
+                            // text
+                            hitem.val(ev);
+                            
+                        } else if( (hitem =  $(hid).find(("input:file[name={0}]".format(key)) ) ).length  !=0 ) {
+                            // file can not be set
+                            // hitem.val(ev);
+                            
+                        } else if( (hitem =  $(hid).find(("[name={0}]".format(key)) ) ).length  !=0 ) {
+                            // jquery do not support type=date 
+                            hitem.val(ev);
+                            
+                        }
+                    }
+                    
+                }
+            },
+
+            /* 
+                前提条件： obj的name和input item的name相同
+                
+                概要： 根据指定的obj name找到dom input item，将dom input item中的值设定到obj中
+                参数：
+                    obj : 需要设置的数据
+                    hid : jquery form 容器 
+            */
+            setForm2obj : function (obj, hid) {
+                for(let key in obj) {
+                    // radio
+                    let hitem = $(hid).find(("input:radio[name={0}]".format(key)));
+                    if(hitem.length !=0) { // foud out radio
+                        obj[key] = hitem.filter(":checked").val();
+                    } else if( (hitem =  $(hid).find(("input:checkbox[name={0}] :checked".format(key)) ) ).length  !=0 ) {
+                        // CheckBox
+                        obj[key] = hitem.val(); // hitem.val() is array
+                
+                    } else if( (hitem =  $(hid).find(("input:text[name={0}]".format(key)) ) ).length  !=0 ) {
+                        // text
+                        obj[key] = hitem.val();
+                    } else if( (hitem =  $(hid).find(("input:file[name={0}]".format(key)) ) ).length  !=0 ) {
+                        // file
+                        obj[key] = hitem.val();
+                    } else if( (hitem =  $(hid).find(("[name={0}]".format(key)) ) ).length  !=0 ) {
+                        // jquery do not support type=date 
+                        obj[key] = hitem.val();
+                    }
+                }
+            },
+
+            /* 
+                前提条件： from的name和desc的name相同
+                
+                概要： 遍历from的属性的key将from属性的值设定到desc的相同key的属性中
+                    不支持deep copy
+                参数：
+                    from : 
+                    desc :  
+            */
+            copyObjectByFrom : (from,desc) => {
+                for(let key in from) {
+                    if(from[key]!=null) {
+                        desc[key] = from[key];
+                    }
+                }
+            }, 
+
+            /* 
+                前提条件： from的name和desc的name相同
+                
+                概要： 遍历desc的属性的key将from属性的值设定到desc的相同key的属性中
+                    不支持deep copy
+                参数：
+                    from : 
+                    desc :  
+            */
+            copyObjectByDesc : (from,desc) => {
+                for(let key in desc) {
+                    if(from[key]!=null) {
+                        desc[key] = from[key];
+                    }
+                }
+            },
+        }
+
+
+
+
+        $(document).ready(()=>{
+
+            // 追加Itemのテンプレート
+            const itemTemp = `<div class="row yakuin_input" style="border: solid; border-width: 1px; border-color: rgb(31, 30, 30); margin: 10px 0 10px 0; padding: 10px 0 10px 0;">
+                        <div class="col-sm-1 col-lg-1 yakuin_input_num" style="margin: 10px 0 30px 0; font-weight: 600;">
+                            {idx}
+                        </div>
+                        <div class="col-sm-11 col-lg-11" >
+                            <div class="row">
+                                <div class="col-sm-4 col-lg-3">
+                                    郵便番号
+                                </div>
+                                    <div class="col-sm-8 col-lg-9 input_containner">
+                                        <input class="finput" type="text" name="postcode" >
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4 col-lg-3">
+                                        住所
+                                    </div>
+                                    <div class="col-sm-8 col-lg-9 input_containner">
+                                        <input class="finput" type="text" name="address" >
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4 col-lg-3">
+                                        氏名（フリガナ）
+                                    </div>
+                                    <div class="col-sm-8 col-lg-9 input_containner" >
+                                        <input class="finput" type="text" name="furikana" >
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    <div class="col-sm-4 col-lg-3">
+                                        氏名
+                                </div>
+                                    <div class="col-sm-8 col-lg-9 input_containner" >
+                                        <input class="finput" type="text" name="name" >
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4 col-lg-3">
+                                        生年月日
+                                </div>
+                                    <div class="col-sm-8 col-lg-9 birthday_containner" >
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> <span class="jy" aria-hidden="true">元号XX年</span>
+                                        <input class="" type="date" name="birthday" id="birthday{idx}" style="margin-left: 20px; width: 70%;">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4 col-lg-3" style="min-height: 45px;">
+                                        性別
+                                    </div>
+                                    <div class="col-sm-8 col-lg-9 input_containner" >
+                                        <input type="radio" name="gender{idx}" value="1" {gender-checked1}>
+                                        <label for="male" style="margin-right: 100px;">男</label>
+                                        <input type="radio" name="gender{idx}" value="2" {gender-checked2}>
+                                        <label for="male">女</label>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    `;
+
+
+            init();
+
+            // 画面初期化
+            function init() {
+                // 从数据库取数据
+                let entityList = null;
+                //entityList = dao.load519HoujinYakuin(user.uid, koubaiInfo.baikyakuId, docIdx);
+                if(entityList!=null) {
+                    // 设置数据
+                    let idx = 0;
+                    let yakuinsHtml = "";
+                    
+                    entityList.forEach(function(v){
+                        let item = itemTemp.replace(/{idx}/g,++idx);
+                        yakuinsHtml += item;
+                    });
+                    // 现追加到dom中
+                    $("#item_container").html(yakuinsHtml);
+                    // loop 设置item
+                    let yakuinList = $(".yakuin_input")
+                    for(let i=0;i<yakuinList.length;i++) {
+                        setItemValue(yakuinList[i], entityList[i]);
+                    }
+                    
+                } else {
+                    // 没有数据的话，设置为空
+                    let idx = 0;
+                    let yakuinsHtml = "";
+                    for(idx=0;idx<3;idx++) {
+                        let item = itemTemp.replace(/{idx}/g,idx + 1)
+                        yakuinsHtml += item;
+                    }
+                    $("#item_container").html($(yakuinsHtml));
+                    // loop 设置item
+                    let yakuinList = $(".yakuin_input")
+                    for(let i=0;i<yakuinList.length;i++) {
+                        setItemValue(yakuinList[i], null);
+                        // 生年月日を和暦に変換する
+                        let bitem = $(yakuinList[i]).find("#birthday"+(i+1));
+                        setBirthdayWareki(bitem);
+                    }
+                }
+
+                // 欄を追加する
+                $("#btn_add_item").click(function(){
+                    var yakuinLen = $(".yakuin_input").length;
+                    var lastYakuin =  $(".yakuin_input")[yakuinLen-1];
+                    let item = itemTemp.replace(/{idx}/g,yakuinLen + 1)
+                    $(lastYakuin).after(item);
+
+                    $(".yakuin_input").find("#birthday"+(yakuinLen + 1)).change(function() {
+                        setBirthdayWareki($(this));
+                    });
+
+                    yakuinLen = $(".yakuin_input").length;
+                    lastYakuin =  $(".yakuin_input")[yakuinLen-1];
+                    setItemValue(lastYakuin, null);
+                    // 生年月日を和暦に変換する
+                    // let bitem = $(lastYakuin).find("[id^='birthday']"); // 以birthday开头的
+                    let bitem = $(lastYakuin).find("#birthday" +yakuinLen );
+
+                    
+                    setBirthdayWareki(bitem);
+
+                });
+
+            }
+
+
+            
+            // 欄追加button click
+            function addItem() {
+
+            }
+
+            /*
+             item: jquery item
+             vobj: Item 的数据
+            */
+            function setItemValue(item, vobj) {
+                let data = vobj;
+                if(vobj == null) {
+                    // 设置为空
+                    data = {
+                        postcode : "",
+                        address : "",
+                        furikana : "",
+                        name : "",
+                        birthday : "1980-01-01",
+                        gender : "0",
+                    };
+                }
+                Tool.setObj2form(data, item);
+            }
+
+
+
+            // 生年月日を和暦に変換する
+            function setBirthdayWareki(item) {
+                var $dob = $(item);
+                var d = moment($dob.val()).toDate();
+                var jy = '元号XX年';
+                if (d.toString() !== "Invalid Date") {
+                    jy = d.toLocaleDateString('ja-JP-u-ca-japanese', {
+                    year: 'numeric'
+                    });
+                }
+                $dob.prev().text(jy);
+            }
+
+        });
+    </Script>
+    
+</body>
+</html>

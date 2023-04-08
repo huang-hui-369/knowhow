@@ -35,7 +35,7 @@ SSL-Session:
     Protocol  : TLSv1.1
 ```
 
-# サーバの証明書をすべて表示
+# 网站の証明書をすべて表示
 
 ```sh
 
@@ -63,7 +63,9 @@ MIIFVDCCBDygAwIBAgIRAL8wc3Bd3+wGCgAAAAEQN5MwDQYJKoZIhvcNAQELBQAw
 
 
 
-# 服务器証明書ファイルの内容を確認
+# 网站証明書ファイルの内容を確認
+
+网站証明書 = 网站的CSRファイル（网站Public key + 网站电子署名） + 证书的签发CA机关
 
 ```
 $ openssl x509 -text -noout -in server-B4019921.cer
@@ -74,6 +76,8 @@ $ openssl x509 -text -noout -in server-B4019921.cer
 
 # CA机关証明書ファイルの内容を確認
 
+CA机关証明書 = CA机关Public key + CA机关电子署名 + 上级CA签发机关（直到CA Root）
+
 ```
 $ openssl x509 -text -noout -in ca-pfwsr3ca.cer
 ```
@@ -83,6 +87,8 @@ $ openssl x509 -text -noout -in ca-pfwsr3ca.cer
 
 # RSA秘密鍵ファイルの内容を確認
 
+用来生成网站的CSRファイル而所需要的 private key + public key
+
 ```
 $ openssl rsa -text -noout -in server.key
 ```
@@ -90,15 +96,19 @@ $ openssl rsa -text -noout -in server.key
 ![](img\2021-11-18-11-33-36.png)
 ![](img\2021-11-18-11-34-10.png)
 
-
 # CSRファイルの内容を確認
+
+为了让CA机关认证而生成的请求书。
+
 ```
 openssl req -text -noout -in 2021futaripassport.csr
 ```
 
 ![](img\2021-11-18-11-38-27.png)
 
-# サーバに設定されている証明書を確認
+# サーバに設定されている証明書（full chain）を確認
+
+full chain = 
 
 ```sh
 openssl s_client -connect www.futari-passport.metro.tokyo.lg.jp:443 -showcerts
@@ -110,4 +120,6 @@ openssl s_client -connect www.futari-passport.metro.tokyo.lg.jp:443 -showcerts
 ![](img\2021-11-18-11-49-36.png)
 ![](img\2021-11-18-11-53-39.png)
 
-由此可以看出，其实服务器fullchain证明书 = 服务器的证明书 + CA证明书
+由此可以看出，其实服务器fullchain证明书 = 网站的证明书 + 上级签发机关的CA证明书（直到CA root 证明书）
+
+每一个证明书 = public key + 电子署名 + 上级签发机关
