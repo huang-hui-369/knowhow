@@ -1,3 +1,54 @@
+# 文本编辑器
+- Notepad++
+- emacs
+- gVim
+
+
+# 搜索工具
+- Listary
+
+# 剪切板管理工具
+Ditto 是一款免费开源的 windows 剪切板管理工具
+
+# Markdown 编辑器
+- Typora
+
+
+# 视频播放工具
+
+- Potplayer 是一款韩国人开发的视频播放工具（https://potplayer.org/）
+- VLC Media Player
+
+# 下载工具
+- Free Download Manager （https://www.freedownloadmanager.org/）
+- WindowsEagleGet
+- WindowsFileZilla  ftp下载
+
+# linux console client
+
+- WindowsTera Term
+
+# 截一个 Gif 工具
+-  ScreenToGif
+
+# 词典软件
+- Lingoes
+
+# 录屏软件
+- FSCapture
+
+# 任务栏工具
+TaskBar 
+
+# 音乐播放
+foobar 2000
+
+# 开源图像编辑软件
+GIMP
+
+# 十六进制编辑器
+- UltraEdit
+- HxD
 
 
 
@@ -10,7 +61,7 @@
 
 Quicker 万能效率工具
 
-Potplayer 是一款韩国人开发的视频播放工具
+
 
 HandBrake是一款免费开源的视频转换工具
 
